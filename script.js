@@ -1,33 +1,28 @@
-const getSumBtn = document.createElement("button");
-getSumBtn.append("Get Total Price");
-document.body.appendChild(getSumBtn);
+ const getSum = () => {
+            const prices = document.querySelectorAll(".price");
+            let total = 0;
 
-const getSum = () => {
-  // grab both possible class names
-  const priceCells = document.querySelectorAll(".prices, .price");
-  let total = 0;
+            prices.forEach(cell => {
+                const value = parseFloat(cell.textContent.trim());
+                if (!isNaN(value)) total += value;
+            });
 
-  priceCells.forEach(td => {
-    const n = parseFloat(td.textContent.trim());
-    if (!isNaN(n)) total += n;
-  });
+            const table = document.querySelector("table");
 
-  const table = document.querySelector("table");
+            // remove old total row if exists
+            const oldRow = document.getElementById("ans");
+            if (oldRow) oldRow.remove();
 
-  // remove an existing total row if present (keeps DOM clean for tests)
-  const oldTotal = table.querySelector("tr[data-total]");
-  if (oldTotal) oldTotal.remove();
+            // create new row with id="ans"
+            const totalRow = document.createElement("tr");
+            totalRow.id = "ans";
 
-  // create a single-cell row with just the numeric total
-  const tr = document.createElement("tr");
-  tr.setAttribute("data-total", "true");
+            const totalCell = document.createElement("td");
+            totalCell.colSpan = 2;
+            totalCell.textContent = total;  // only number
 
-  const td = document.createElement("td");
-  td.colSpan = 2;
-  td.textContent = total; // <-- number only (important for tests)
+            totalRow.appendChild(totalCell);
+            table.appendChild(totalRow);
+        };
 
-  tr.appendChild(td);
-  table.appendChild(tr);
-};
-
-getSumBtn.addEventListener("click", getSum);
+        getSumBtn.addEventListener("click", getSum);
